@@ -10,7 +10,7 @@
         android:id="@+id/recipe_toolbar"
         layout="@layout/toolbar" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_recipe_detail"
         android:name="com.kulloveth.bakingApp.ui.fragments.DetailFragment"
         android:layout_width="match_parent"

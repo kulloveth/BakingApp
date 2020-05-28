@@ -22,13 +22,22 @@ public class MainActivityViewModel extends ViewModel {
     private static final String TAG = MainActivityViewModel.class.getSimpleName();
     private BakingApiServiceInterface apiServiceInterface;
     private MutableLiveData<List<Recipe>> recipeLivedata;
+    private MutableLiveData<Recipe> recipeMutableLiveData;
     private ProgressListener progressListener;
 
     public MainActivityViewModel() {
         apiServiceInterface = ApiUtils.getBakingApiServiceInterface();
         recipeLivedata = new MutableLiveData<>();
+        recipeMutableLiveData = new MutableLiveData<>();
     }
 
+    public void setRecipeLivedata(Recipe recipe) {
+        recipeMutableLiveData.setValue(recipe);
+    }
+
+    public LiveData<Recipe> getRecipeLivedata() {
+        return recipeMutableLiveData;
+    }
 
     public LiveData<List<Recipe>> getRecipe() {
         progressListener.showLoading();
