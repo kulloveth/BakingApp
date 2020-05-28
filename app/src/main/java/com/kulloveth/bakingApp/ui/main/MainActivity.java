@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MainAdapter();
         recyclerView = binding.recipeRv;
         recyclerView.setAdapter(adapter);
-        setLayoutManager();
+       setLayoutManager();
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.grid_spans)));
         getRecipe();
 
 
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         if (!isTablet) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        } else {
+        }
+        if(isTablet){
             recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         }
     }
