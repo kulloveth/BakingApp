@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentDetailBinding;
 import com.kulloveth.bakingApp.ui.adapters.IngredientsAdapter;
+import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 
 /**
@@ -27,6 +29,7 @@ public class DetailFragment extends Fragment {
     MainActivityViewModel viewModel;
     RecyclerView ingredientsRecyclerView;
     RecyclerView stepRecyclerView;
+    StepAdapter stepAdapter;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -46,14 +49,21 @@ public class DetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.recipeToolbar.recipeToolbar.setTitle(requireActivity().getResources().getString(R.string.recipe_detail));
+
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         ingredientsAdapter = new IngredientsAdapter();
         ingredientsRecyclerView = binding.ingredientsRv;
         ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
+        stepAdapter = new StepAdapter();
         stepRecyclerView = binding.stepRv;
+        stepRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        stepRecyclerView.setHasFixedSize(true);
+        stepRecyclerView.setAdapter(stepAdapter);
         getIngredients();
+        getStep();
 
 
     }
@@ -61,6 +71,12 @@ public class DetailFragment extends Fragment {
     private void getIngredients() {
         viewModel.getRecipeLivedata().observe(requireActivity(), recipe -> {
             ingredientsAdapter.submitList(recipe.getIngredients());
+        });
+    }
+
+    private void getStep() {
+        viewModel.getRecipeLivedata().observe(requireActivity(), recipe -> {
+            stepAdapter.submitList(recipe.getSteps());
         });
     }
 }

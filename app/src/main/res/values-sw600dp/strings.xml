@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="no_internet_message">No internet Connection</string>
+    <string name="recipe_detail">Recipe Detail</string>
 </resources>

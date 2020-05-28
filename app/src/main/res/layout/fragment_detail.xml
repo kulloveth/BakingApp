@@ -10,11 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/recipe_toolbar"
+            layout="@layout/toolbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredients_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dimens_16dp"/>
+            android:layout_marginBottom="@dimen/dimens_16dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/step_rv"
