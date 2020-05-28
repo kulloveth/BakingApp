@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentDetailBinding;
+import com.kulloveth.bakingApp.model.Step;
 import com.kulloveth.bakingApp.ui.adapters.IngredientsAdapter;
 import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
@@ -21,7 +23,7 @@ import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements StepAdapter.StepItemClickListener {
 
 
     FragmentDetailBinding binding;
@@ -58,6 +60,7 @@ public class DetailFragment extends Fragment {
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
         stepAdapter = new StepAdapter();
+        stepAdapter.setClickListener(this);
         stepRecyclerView = binding.stepRv;
         stepRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         stepRecyclerView.setHasFixedSize(true);
@@ -78,5 +81,11 @@ public class DetailFragment extends Fragment {
         viewModel.getRecipeLivedata().observe(requireActivity(), recipe -> {
             stepAdapter.submitList(recipe.getSteps());
         });
+    }
+
+    @Override
+    public void stepItemClicked(Step step) {
+        viewModel.setStepLivedata(step);
+        Navigation.findNavController(requireView()).navigate(DetailFragmentDirections.actionDetailFragmentToStepsFragment());
     }
 }

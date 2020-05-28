@@ -5,16 +5,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.databinding.StepItemBinding;
-import com.kulloveth.bakingApp.model.Ingredient;
+import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
+import com.kulloveth.bakingApp.ui.fragments.DetailFragmentDirections;
 
 public class StepAdapter extends ListAdapter<Step, StepAdapter.StepViewHolder> {
 
+
+    public StepItemClickListener clickListener;
+
+    public void setClickListener(StepItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     public StepAdapter() {
         super(sCallback);
@@ -31,6 +39,10 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepViewHolder> {
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         Step step = getItem(position);
         holder.stepDescription.setText(step.getShortDescription());
+        holder.itemView.setOnClickListener(v -> {
+            clickListener.stepItemClicked(step);
+
+        });
 
 
     }
@@ -56,4 +68,8 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepViewHolder> {
             return oldItem.equals(newItem);
         }
     };
+
+    public interface StepItemClickListener {
+        void stepItemClicked(Step step);
+    }
 }
