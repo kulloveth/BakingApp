@@ -1,8 +1,10 @@
-package com.kulloveth.bakingApp;
+package com.kulloveth.bakingApp.ui.main;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.kulloveth.bakingApp.R;
 
 public class MainActivity extends AppCompatActivity {
 
