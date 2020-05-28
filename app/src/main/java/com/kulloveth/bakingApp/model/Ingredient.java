@@ -7,11 +7,20 @@ public class Ingredient {
 
     @SerializedName("quantity")
     @Expose
-    private int quantity;
+    private double quantity;
     @SerializedName("measure")
     @Expose
     private String measure;
     @SerializedName("ingredient")
     @Expose
     private String ingredient;
+
+    public Ingredient() {
+    }
+
+    public Ingredient(double quantity, String measure, String ingredient) {
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
 }
