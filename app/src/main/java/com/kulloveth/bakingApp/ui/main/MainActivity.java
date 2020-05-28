@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ProgressListener 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.recipeToolbar.setTitle("Recipes");
+        binding.recipeToolbar.recipeToolbar.setTitle("Recipes");
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         viewModel.setProgressListener(this);
         adapter = new MainAdapter();

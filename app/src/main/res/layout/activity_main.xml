@@ -6,12 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/recipe_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/saddlebrown" />
+    <include android:id="@+id/recipe_toolbar" layout="@layout/toolbar"/>
 
     <ProgressBar
         android:id="@+id/recipe_progressbar"
