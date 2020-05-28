@@ -1,7 +1,6 @@
 package com.kulloveth.bakingApp.ui.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import java.util.List;
 
 public class MainAdapter extends ListAdapter<Recipe, MainAdapter.MainViewholder> {
 
+    RecipeItemClickListener clickListener;
 
     public MainAdapter() {
         super(sCallback);
@@ -31,6 +31,10 @@ public class MainAdapter extends ListAdapter<Recipe, MainAdapter.MainViewholder>
     public MainViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecipeItemBinding binding = RecipeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new MainViewholder(binding);
+    }
+
+    public void setClickListener(RecipeItemClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -47,6 +51,10 @@ public class MainAdapter extends ListAdapter<Recipe, MainAdapter.MainViewholder>
                     .into(holder.recipeImage);
         }
 
+        holder.itemView.setOnClickListener(v -> {
+            clickListener.recipeItemClicked(recipe);
+        });
+
 
     }
 
@@ -60,6 +68,8 @@ public class MainAdapter extends ListAdapter<Recipe, MainAdapter.MainViewholder>
             recipeName = binding.recipeName;
             recipeImage = binding.recipeIv;
             steps = binding.steps;
+
+
         }
     }
 
@@ -74,4 +84,8 @@ public class MainAdapter extends ListAdapter<Recipe, MainAdapter.MainViewholder>
             return oldItem.equals(newItem);
         }
     };
+
+    public interface RecipeItemClickListener {
+        void recipeItemClicked(Recipe recipe);
+    }
 }
