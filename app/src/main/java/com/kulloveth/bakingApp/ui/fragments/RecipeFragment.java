@@ -10,7 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +22,15 @@ import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentRecipeBinding;
 import com.kulloveth.bakingApp.model.Recipe;
+import com.kulloveth.bakingApp.model.Step;
 import com.kulloveth.bakingApp.ui.adapters.MainAdapter;
 import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.kulloveth.bakingApp.utils.ProgressListener;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.kulloveth.bakingApp.ui.fragments.DetailFragment.RECIPE_KEY;
 
 
 public class RecipeFragment extends Fragment implements ProgressListener, MainAdapter.RecipeItemClickListener {
@@ -35,6 +41,8 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
     FragmentRecipeBinding binding;
     RecyclerView recyclerView;
     Navigation navigation;
+    List<Step> steps = new ArrayList<>();
+    boolean isTablet;
 
 
     public RecipeFragment() {
@@ -55,7 +63,9 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
         binding.recipeToolbar.recipeToolbar.setTitle("Recipes");
+
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         viewModel.setProgressListener(this);
         adapter = new MainAdapter();
@@ -77,7 +87,7 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
     }
 
     private void setLayoutManager() {
-        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+
         if (!isTablet) {
             recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         } else {
@@ -113,8 +123,12 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
 
     @Override
     public void recipeItemClicked(Recipe recipe) {
+
+            Bundle bundle = new Bundle();
         viewModel.setRecipeLivedata(recipe);
-        Navigation.findNavController(requireView()).navigate(RecipeFragmentDirections.actionRecipeFragmentToDetailFragment());
+        bundle.putParcelable(RECIPE_KEY,recipe);
+        Navigation.findNavController(requireView()).navigate(R.id.action_recipeFragment_to_detailFragment,bundle);
+
 
     }
 }

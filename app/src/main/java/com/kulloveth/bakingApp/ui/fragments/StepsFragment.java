@@ -3,20 +3,17 @@ package com.kulloveth.bakingApp.ui.fragments;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -27,7 +24,6 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -46,9 +42,10 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class StepsFragment extends Fragment {
-    private static final String STEP_KEY = "step_key";
+    public static final String STEP_KEY = "step-key";
     private static final String SIMPLE_EXPOPLAYER_STTE = "simple_exoplayerstate";
     private static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
+    private static final String IS_TABLET_KEY = "tablet";
 
     FragmentStepsBinding binding;
     MainActivityViewModel mainActivityViewModel;
@@ -56,13 +53,11 @@ public class StepsFragment extends Fragment {
     SimpleExoPlayerView simpleExoPlayerView;
     TextView noVideoMessage;
     ImageView thumbnail;
+    private List<Step> steps = new ArrayList<>();
     Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
-    private List<Step> steps = new ArrayList<>();
-
-
-    PlayerView playerView;
+    private boolean isTablet;
 
     private static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
@@ -84,6 +79,7 @@ public class StepsFragment extends Fragment {
 
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -91,23 +87,24 @@ public class StepsFragment extends Fragment {
         noVideoMessage = binding.noVideoMessage;
         expoPlayerPosition = 0;
         exoPlayerState = true;
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            step = bundle.getParcelable(STEP_KEY);
+        }
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP_KEY);
             exoPlayerState = savedInstanceState.getBoolean(SIMPLE_EXPOPLAYER_STTE);
             expoPlayerPosition = savedInstanceState.getLong(SIMPLE_EXOPLAYER_POSITION);
-
+            //isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
 
         setPortraitOrLandscape();
 
         mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        mainActivityViewModel.getStepLivedata().observe(requireActivity(), step -> {
-                this.step = step;
 
-        });
 
-        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
             if (AppUtils.isConnected(requireActivity())) {
                 binding.thummbnail.setVisibility(View.GONE);
@@ -115,7 +112,7 @@ public class StepsFragment extends Fragment {
                 initializePlayer(Uri.parse(step.getVideoURL()));
             } else {
                 simpleExoPlayerView.setVisibility(View.GONE);
-                noVideoMessage.setText(getResources().getString(R.string.no_internet_message));
+                noVideoMessage.setText("No Internet");
             }
         } else {
             if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
@@ -128,8 +125,8 @@ public class StepsFragment extends Fragment {
         }
         binding.shortDescription.setText(step.getShortDescription());
         binding.longDescription.setText(step.getDescription());
-
     }
+
 
     private void initializePlayer(Uri mediaUri) {
         if (simpleExoPlayer == null) {
@@ -171,12 +168,11 @@ public class StepsFragment extends Fragment {
 
     private void releasePlayer() {
         if (!step.getVideoURL().equals("") && simpleExoPlayer != null) {
-           simpleExoPlayer.stop();
-           simpleExoPlayer.release();
-           simpleExoPlayer=null;
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
         }
     }
-
 
 
     @Override
@@ -192,6 +188,7 @@ public class StepsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
             initializePlayer(Uri.parse(step.getVideoURL()));
         }
@@ -201,9 +198,14 @@ public class StepsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STEP_KEY,step);
-        outState.putBoolean(SIMPLE_EXPOPLAYER_STTE,exoPlayerState);
-        outState.putLong(SIMPLE_EXOPLAYER_POSITION,expoPlayerPosition);
+        outState.putParcelable(STEP_KEY, step);
+        outState.putBoolean(SIMPLE_EXPOPLAYER_STTE, exoPlayerState);
+        outState.putLong(SIMPLE_EXOPLAYER_POSITION, expoPlayerPosition);
+        //outState.putBoolean(IS_TABLET_KEY, isTablet);
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
     }
 
     @Override
@@ -212,5 +214,13 @@ public class StepsFragment extends Fragment {
         if (step != null) {
             releasePlayer();
         }
+    }
+
+    public static StepsFragment newInstance(Step step) {
+        StepsFragment stepsFragment = new StepsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(STEP_KEY, step);
+        stepsFragment.setArguments(args);
+        return stepsFragment;
     }
 }
