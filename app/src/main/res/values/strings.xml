@@ -6,4 +6,5 @@
     <string name="steps">Steps : </string>
     <string name="no_internet_message">No internet Connection</string>
     <string name="recipe_detail">Recipe Detail</string>
+    <string name="no_video_available">No Video Available</string>
 </resources>

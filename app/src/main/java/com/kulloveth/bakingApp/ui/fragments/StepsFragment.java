@@ -39,29 +39,29 @@ import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class StepsFragment extends Fragment {
-    private static final String STEP_KEY = "step_key";
+    public static final String STEP_KEY = "step-key";
     private static final String SIMPLE_EXPOPLAYER_STTE = "simple_exoplayerstate";
     private static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
+    private static final String IS_TABLET_KEY = "tablet";
 
     FragmentStepsBinding binding;
     MainActivityViewModel mainActivityViewModel;
-    TextView stepDetailDescription;
-    TextView stepShortDescription;
     SimpleExoPlayer simpleExoPlayer;
     SimpleExoPlayerView simpleExoPlayerView;
     TextView noVideoMessage;
     ImageView thumbnail;
+    private List<Step> steps = new ArrayList<>();
     Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
-
-
-    PlayerView playerView;
+    private boolean isTablet;
 
     private static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
@@ -83,6 +83,7 @@ public class StepsFragment extends Fragment {
 
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -90,44 +91,50 @@ public class StepsFragment extends Fragment {
         noVideoMessage = binding.noVideoMessage;
         expoPlayerPosition = 0;
         exoPlayerState = true;
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            step = bundle.getParcelable(STEP_KEY);
+        }
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP_KEY);
             exoPlayerState = savedInstanceState.getBoolean(SIMPLE_EXPOPLAYER_STTE);
             expoPlayerPosition = savedInstanceState.getLong(SIMPLE_EXOPLAYER_POSITION);
-
+            //isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
 
         setPortraitOrLandscape();
 
         mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        mainActivityViewModel.getStepLivedata().observe(requireActivity(), step -> {
+       /* mainActivityViewModel.getStepLivedata().observe(requireActivity(), step -> {
                 this.step = step;
 
-        });
+        });*/
 
-        if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
-            if (AppUtils.isConnected(requireActivity())) {
-                binding.thummbnail.setVisibility(View.GONE);
-                noVideoMessage.setVisibility(View.GONE);
-                initializePlayer(Uri.parse(step.getVideoURL()));
+            if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
+                if (AppUtils.isConnected(requireActivity())) {
+                    binding.thummbnail.setVisibility(View.GONE);
+                    noVideoMessage.setVisibility(View.GONE);
+                    initializePlayer(Uri.parse(step.getVideoURL()));
+                } else {
+                    simpleExoPlayerView.setVisibility(View.GONE);
+                    noVideoMessage.setText("No Internet");
+                }
             } else {
+                if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
+                    binding.thummbnail.setVisibility(View.VISIBLE);
+                    Picasso.get().load(step.getThumbnailURL()).placeholder(R.drawable.ingredients).into(binding.thummbnail);
+                }
+                binding.noVideoMessage.setVisibility(View.VISIBLE);
                 simpleExoPlayerView.setVisibility(View.GONE);
-                noVideoMessage.setText("No Internet");
-            }
-        } else {
-            if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
-                binding.thummbnail.setVisibility(View.VISIBLE);
-                Picasso.get().load(step.getThumbnailURL()).placeholder(R.drawable.ingredients).into(binding.thummbnail);
-            }
-            binding.noVideoMessage.setVisibility(View.VISIBLE);
-            simpleExoPlayerView.setVisibility(View.GONE);
 
-        }
-        binding.shortDescription.setText(step.getShortDescription());
-        binding.longDescription.setText(step.getDescription());
+            }
+            binding.shortDescription.setText(step.getShortDescription());
+            binding.longDescription.setText(step.getDescription());
 
     }
+
 
     private void initializePlayer(Uri mediaUri) {
         if (simpleExoPlayer == null) {
@@ -171,9 +178,9 @@ public class StepsFragment extends Fragment {
 
     private void releasePlayer() {
         if (!step.getVideoURL().equals("") && simpleExoPlayer != null) {
-           simpleExoPlayer.stop();
-           simpleExoPlayer.release();
-           simpleExoPlayer=null;
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
         }
     }
 
@@ -190,18 +197,24 @@ public class StepsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
-            initializePlayer(Uri.parse(step.getVideoURL()));
-        }
+
+            if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
+                initializePlayer(Uri.parse(step.getVideoURL()));
+            }
 
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STEP_KEY,step);
-        outState.putBoolean(SIMPLE_EXPOPLAYER_STTE,exoPlayerState);
-        outState.putLong(SIMPLE_EXOPLAYER_POSITION,expoPlayerPosition);
+        outState.putParcelable(STEP_KEY, step);
+        outState.putBoolean(SIMPLE_EXPOPLAYER_STTE, exoPlayerState);
+        outState.putLong(SIMPLE_EXOPLAYER_POSITION, expoPlayerPosition);
+        //outState.putBoolean(IS_TABLET_KEY, isTablet);
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
     }
 
     @Override
@@ -210,5 +223,13 @@ public class StepsFragment extends Fragment {
         if (step != null) {
             releasePlayer();
         }
+    }
+
+    public static StepsFragment newInstance(Step step){
+        StepsFragment stepsFragment = new StepsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(STEP_KEY,step);
+        stepsFragment.setArguments(args);
+        return stepsFragment;
     }
 }

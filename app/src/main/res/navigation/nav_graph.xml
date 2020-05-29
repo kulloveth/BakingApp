@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_recipe" >
         <action
             android:id="@+id/action_recipeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment" >
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -21,11 +23,21 @@
         tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_detailFragment_to_stepsFragment"
-            app:destination="@id/stepsFragment" />
+            app:destination="@id/stepsFragment" >
+        </action>
+
+        <argument
+            android:name="steps-key"
+            app:argType="com.kulloveth.bakingApp.model.Step"
+            app:nullable="false" />
     </fragment>
     <fragment
         android:id="@+id/stepsFragment"
         android:name="com.kulloveth.bakingApp.ui.fragments.StepsFragment"
         android:label="fragment_steps"
         tools:layout="@layout/fragment_steps" />
+    <argument
+        android:name="step-key"
+        app:argType="com.kulloveth.bakingApp.model.Step"
+        app:nullable="false" />
 </navigation>

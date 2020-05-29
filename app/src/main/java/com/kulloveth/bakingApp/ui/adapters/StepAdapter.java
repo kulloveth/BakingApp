@@ -1,6 +1,7 @@
 package com.kulloveth.bakingApp.ui.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -70,6 +71,6 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepViewHolder> {
     };
 
     public interface StepItemClickListener {
-        void stepItemClicked(Step step);
+        void stepItemClicked( Step step);
     }
 }

@@ -9,5 +9,11 @@
         android:id="@+id/stepsFragment2"
         android:name="com.kulloveth.bakingApp.ui.fragments.StepsFragment"
         android:label="fragment_steps"
-        tools:layout="@layout/fragment_steps" />
+        tools:layout="@layout/fragment_steps" >
+
+        <argument
+            android:name="step-key"
+            app:argType="com.kulloveth.bakingApp.model.Step"
+            app:nullable="false" />
+    </fragment>
 </navigation>
