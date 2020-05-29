@@ -63,7 +63,10 @@ public class DetailFragment extends Fragment implements StepAdapter.StepItemClic
         super.onActivityCreated(savedInstanceState);
 
         binding.recipeToolbar.recipeToolbar.setTitle(requireActivity().getResources().getString(R.string.recipe_detail));
-        binding.recipeToolbar.recipeToolbar.setNavigationIcon();
+       //binding.recipeToolbar.recipeToolbar.setNavigationIcon(R.drawable.b);
+        binding.recipeToolbar.recipeToolbar.setNavigationOnClickListener(v->{
+
+        });
         isTablet = getResources().getBoolean(R.bool.isTablet);
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         Bundle bundle = getArguments();
