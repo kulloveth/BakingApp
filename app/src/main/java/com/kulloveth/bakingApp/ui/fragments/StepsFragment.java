@@ -39,6 +39,8 @@ import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,8 +52,6 @@ public class StepsFragment extends Fragment {
 
     FragmentStepsBinding binding;
     MainActivityViewModel mainActivityViewModel;
-    TextView stepDetailDescription;
-    TextView stepShortDescription;
     SimpleExoPlayer simpleExoPlayer;
     SimpleExoPlayerView simpleExoPlayerView;
     TextView noVideoMessage;
@@ -59,6 +59,7 @@ public class StepsFragment extends Fragment {
     Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
+    private List<Step> steps = new ArrayList<>();
 
 
     PlayerView playerView;
@@ -106,6 +107,7 @@ public class StepsFragment extends Fragment {
 
         });
 
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
             if (AppUtils.isConnected(requireActivity())) {
                 binding.thummbnail.setVisibility(View.GONE);
@@ -113,7 +115,7 @@ public class StepsFragment extends Fragment {
                 initializePlayer(Uri.parse(step.getVideoURL()));
             } else {
                 simpleExoPlayerView.setVisibility(View.GONE);
-                noVideoMessage.setText("No Internet");
+                noVideoMessage.setText(getResources().getString(R.string.no_internet_message));
             }
         } else {
             if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
@@ -160,12 +162,10 @@ public class StepsFragment extends Fragment {
             params.width = FrameLayout.LayoutParams.MATCH_PARENT;
             params.height = FrameLayout.LayoutParams.MATCH_PARENT;
             simpleExoPlayerView.setLayoutParams(params);
-//            if (requireActivity() != null) {
-//                ((AppCompatActivity) requireActivity()).getSupportActionBar().hide();
-//                requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            }
 
         }
+
+
     }
 
 
@@ -176,6 +176,8 @@ public class StepsFragment extends Fragment {
            simpleExoPlayer=null;
         }
     }
+
+
 
     @Override
     public void onPause() {
