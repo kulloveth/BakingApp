@@ -1,20 +1,17 @@
 package com.kulloveth.bakingApp.ui.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.databinding.StepItemBinding;
-import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.fragments.DetailFragmentDirections;
+
 
 public class StepAdapter extends ListAdapter<Step, StepAdapter.StepViewHolder> {
 

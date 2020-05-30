@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.R;
-import com.kulloveth.bakingApp.databinding.FragmentDetailBinding;
+import com.kulloveth.bakingApp.databinding.IngredientDetailBinding;
 import com.kulloveth.bakingApp.model.Ingredient;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
@@ -38,7 +38,7 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 public class IngredientFragment extends Fragment {
 
     public static final String RECIPE_KEY = "steps-key";
-    FragmentDetailBinding binding;
+   IngredientDetailBinding binding;
     IngredientsAdapter ingredientsAdapter;
     RecyclerView ingredientsRecyclerView;
     boolean isTablet;
@@ -65,8 +65,8 @@ public class IngredientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentDetailBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+       binding = IngredientDetailBinding.inflate(inflater, container, false);
+       View view = binding.getRoot();
         return view;
     }
 
