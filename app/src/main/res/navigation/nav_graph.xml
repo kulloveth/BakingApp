@@ -23,7 +23,7 @@
         tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_detailFragment_to_stepsFragment"
-            app:destination="@id/stepsFragment" >
+            app:destination="@id/stepDetailFragment" >
         </action>
 
         <argument
@@ -37,8 +37,8 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/stepsFragment"
-        android:name="com.kulloveth.bakingApp.ui.fragments.StepsFragment"
+        android:id="@+id/stepDetailFragment"
+        android:name="com.kulloveth.bakingApp.ui.fragments.StepDetailFragment"
         android:label="fragment_steps"
         tools:layout="@layout/fragment_steps" />
     <argument

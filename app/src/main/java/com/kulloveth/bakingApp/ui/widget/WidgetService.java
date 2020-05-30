@@ -1,94 +1,56 @@
 package com.kulloveth.bakingApp.ui.widget;
 
+import android.app.IntentService;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.annotation.Nullable;
 
-import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.model.Ingredient;
-import com.kulloveth.bakingApp.model.Recipe;
-import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
+import com.kulloveth.bakingApp.model.Step;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class WidgetService extends RemoteViewsService {
-    MainActivityViewModel viewModel;
+public class WidgetService extends IntentService {
 
-    @Override
-    public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new WidgetRemoteViewsService(this.getApplicationContext(), intent);
+    public static final String INGREDIENTS_KEY = "ingredients_key";
+    public static final String RECIPE_NAME_KEY = "recipe_name_key";
+    public static final String STEPS_LIST_KEY = "steps_list_key";
+    public static final String IS_INTENTFROMWDGET_KEY = "isintentfrom_key";
+    public static final String ACTOIN_UPDATE_KEY = "actionupdate_key";
+
+    public WidgetService() {
+        super("WidgetService");
     }
 
-    class WidgetRemoteViewsService implements RemoteViewsFactory {
-        private List<Ingredient> ingredients = new ArrayList<>();
-        private Context context;
+    public static void actionUpdateWidget(Context context, ArrayList<Ingredient> ingredients, String recipeName, ArrayList<Step> steps) {
+        Intent intent = new Intent(context, WidgetService.class);
+        intent.setAction(ACTOIN_UPDATE_KEY);
+        intent.putParcelableArrayListExtra(INGREDIENTS_KEY, ingredients);
+        intent.putParcelableArrayListExtra(STEPS_LIST_KEY, steps);
+        intent.putExtra(RECIPE_NAME_KEY, recipeName);
+        context.startService(intent);
+    }
 
-        public WidgetRemoteViewsService(Context context, Intent intent) {
-            this.context = context;
 
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        if (intent != null) {
+            final String action = intent.getAction();
+            if (ACTOIN_UPDATE_KEY.equals(action)) {
+                ArrayList<Ingredient> ingredients = intent.getParcelableArrayListExtra(INGREDIENTS_KEY);
+                ArrayList<Step> steps = intent.getParcelableArrayListExtra(STEPS_LIST_KEY);
+                String recipeName = intent.getStringExtra(RECIPE_NAME_KEY);
+                handleActionUpdate(ingredients, recipeName, steps);
+            }
         }
+    }
 
-        @Override
-        public void onCreate() {
-            viewModel = new ViewModelProvider((ViewModelStoreOwner) this).get(MainActivityViewModel.class);
-        }
-
-        @Override
-        public void onDataSetChanged() {
-            ingredients.clear();
-            viewModel.getRecipeLivedata().observe((LifecycleOwner) context.getApplicationContext(), new Observer<Recipe>() {
-                @Override
-                public void onChanged(Recipe recipe) {
-                    ingredients = recipe.getIngredients();
-                }
-            });
-
-        }
-
-        @Override
-        public void onDestroy() {
-
-        }
-
-        @Override
-        public int getCount() {
-            return ingredients.size();
-        }
-
-        @Override
-        public RemoteViews getViewAt(int position) {
-            final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_item);
-            Ingredient ingredient = ingredients.get(position);
-            remoteViews.setTextViewText(R.id.ingredient_naame, ingredient.getIngredient());
-            remoteViews.setTextViewText(R.id.quantity, ingredient.getMeasure() + " " + ingredient.getQuantity());
-            return remoteViews;
-        }
-
-        @Override
-        public RemoteViews getLoadingView() {
-            return null;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
+    private void handleActionUpdate(ArrayList<Ingredient> ingredients, String recipeName, ArrayList<Step> steps) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, WidgetProvider.class));
+        WidgetProvider.updateIngredientWidget(this, appWidgetManager, ingredients, recipeName, steps, widgetIds);
     }
 }

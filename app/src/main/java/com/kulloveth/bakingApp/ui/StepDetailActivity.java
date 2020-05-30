@@ -1,19 +1,15 @@
-package com.kulloveth.bakingApp.ui.fragments;
+package com.kulloveth.bakingApp.ui;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,70 +25,46 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
-import com.kulloveth.bakingApp.databinding.FragmentStepsBinding;
+import com.kulloveth.bakingApp.databinding.ActivityStepDetailBinding;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class StepsFragment extends Fragment {
-    public static final String STEP_KEY = "step-key";
-    private static final String SIMPLE_EXPOPLAYER_STTE = "simple_exoplayerstate";
-    private static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
-    private static final String IS_TABLET_KEY = "tablet";
+import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.SIMPLE_EXOPLAYER_POSITION;
+import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.SIMPLE_EXPOPLAYER_STTE;
+import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.STEP_KEY;
 
-    FragmentStepsBinding binding;
-    MainActivityViewModel mainActivityViewModel;
-    SimpleExoPlayer simpleExoPlayer;
-    SimpleExoPlayerView simpleExoPlayerView;
-    TextView noVideoMessage;
-    ImageView thumbnail;
-    private List<Step> steps = new ArrayList<>();
+public class StepDetailActivity extends AppCompatActivity {
+
+    ActivityStepDetailBinding binding;
+
     Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
     private boolean isTablet;
+    SimpleExoPlayer simpleExoPlayer;
+    SimpleExoPlayerView simpleExoPlayerView;
+    TextView noVideoMessage;
 
     private static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
         return mimeType != null && mimeType.startsWith("image");
     }
 
-    public StepsFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentStepsBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
-
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityStepDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         simpleExoPlayerView = binding.mediaPlayer;
         noVideoMessage = binding.noVideoMessage;
         expoPlayerPosition = 0;
         exoPlayerState = true;
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            step = bundle.getParcelable(STEP_KEY);
-        }
+        Intent intent = getIntent();
+        step = intent.getParcelableExtra(STEP_KEY);
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP_KEY);
             exoPlayerState = savedInstanceState.getBoolean(SIMPLE_EXPOPLAYER_STTE);
@@ -102,11 +74,9 @@ public class StepsFragment extends Fragment {
 
         setPortraitOrLandscape();
 
-        mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-
 
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
-            if (AppUtils.isConnected(requireActivity())) {
+            if (AppUtils.isConnected(this)) {
                 binding.thummbnail.setVisibility(View.GONE);
                 noVideoMessage.setVisibility(View.GONE);
                 initializePlayer(Uri.parse(step.getVideoURL()));
@@ -132,12 +102,11 @@ public class StepsFragment extends Fragment {
         if (simpleExoPlayer == null) {
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(requireContext(), trackSelector, loadControl);
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
             simpleExoPlayerView.setPlayer(simpleExoPlayer);
-            String uAgent = Util.getUserAgent(requireContext(), "Baking App");
+            String uAgent = Util.getUserAgent(this, "Baking App");
             MediaSource mediaSource = null;
-            if (requireActivity() != null)
-                mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(requireActivity(), uAgent), new DefaultExtractorsFactory(), null, null);
+            mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(this, uAgent), new DefaultExtractorsFactory(), null, null);
             if (expoPlayerPosition != 0) {
                 simpleExoPlayer.seekTo(expoPlayerPosition);
             }
@@ -204,23 +173,11 @@ public class StepsFragment extends Fragment {
         //outState.putBoolean(IS_TABLET_KEY, isTablet);
     }
 
-    public void setStep(Step step) {
-        this.step = step;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (step != null) {
             releasePlayer();
         }
-    }
-
-    public static StepsFragment newInstance(Step step) {
-        StepsFragment stepsFragment = new StepsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(STEP_KEY, step);
-        stepsFragment.setArguments(args);
-        return stepsFragment;
     }
 }

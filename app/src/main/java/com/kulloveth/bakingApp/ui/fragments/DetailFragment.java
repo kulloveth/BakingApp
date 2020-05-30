@@ -1,5 +1,6 @@
 package com.kulloveth.bakingApp.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,45 +10,56 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentDetailBinding;
+import com.kulloveth.bakingApp.model.Ingredient;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
+import com.kulloveth.bakingApp.ui.StepDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.IngredientsAdapter;
 import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.STEP_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment implements StepAdapter.StepItemClickListener {
+public class DetailFragment extends Fragment {
 
     public static final String RECIPE_KEY = "steps-key";
     FragmentDetailBinding binding;
     IngredientsAdapter ingredientsAdapter;
-    MainActivityViewModel viewModel;
     RecyclerView ingredientsRecyclerView;
-    RecyclerView stepRecyclerView;
-    StepAdapter stepAdapter;
     boolean isTablet;
-    Recipe recipe;
-    List<Step> stepList = new ArrayList<>();
+    ArrayList<Ingredient> ingredients = new ArrayList<>();
+    String recipeName;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,23 +71,14 @@ public class DetailFragment extends Fragment implements StepAdapter.StepItemClic
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        binding.recipeToolbar.recipeToolbar.setTitle(requireActivity().getResources().getString(R.string.recipe_detail));
-       //binding.recipeToolbar.recipeToolbar.setNavigationIcon(R.drawable.b);
-        binding.recipeToolbar.recipeToolbar.setNavigationOnClickListener(v->{
 
-        });
         isTablet = getResources().getBoolean(R.bool.isTablet);
-        viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            recipe = bundle.getParcelable(RECIPE_KEY);
-        }
 
-        if (savedInstanceState != null){
-            recipe = savedInstanceState.getParcelable(RECIPE_KEY);
+        if (savedInstanceState != null) {
+            ingredients = savedInstanceState.getParcelableArrayList(INGREDIENTS_KEY);
         }
 
         ingredientsAdapter = new IngredientsAdapter();
@@ -83,62 +86,22 @@ public class DetailFragment extends Fragment implements StepAdapter.StepItemClic
         ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
-        stepAdapter = new StepAdapter();
-        stepAdapter.setClickListener(this);
-        stepRecyclerView = binding.stepRv;
-        stepRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        stepRecyclerView.setHasFixedSize(true);
-        stepRecyclerView.setAdapter(stepAdapter);
+
         getIngredients();
-        getStep();
-
-        stepList = recipe.getSteps();
-
-        if(isTablet) {
-            StepsFragment stepsFragment = new StepsFragment();
-            stepsFragment.setStep(stepList.get(0));
-            FragmentManager manager = getChildFragmentManager();
-            if (manager != null) {
-                manager.beginTransaction().replace(R.id.step_detail_graph, stepsFragment).commit();
-            }
-        }
-
     }
 
     private void getIngredients() {
-        viewModel.getRecipeLivedata().observe(requireActivity(),recipes -> {
-            ingredientsAdapter.submitList(recipes.getIngredients());
-        });
-
+        ingredientsAdapter.submitList(ingredients);
+        Log.e("ingre", "getIngredients: "+ingredients);
     }
 
-    private void getStep() {
-        viewModel.getRecipeLivedata().observe(requireActivity(),recipes->{
-            stepAdapter.submitList(recipes.getSteps());
-        });
-
-    }
-
-
-    @Override
-    public void stepItemClicked(Step step) {
-        if (isTablet) {
-            StepsFragment fragment = StepsFragment.newInstance(step);
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.step_detail_graph, fragment);
-            transaction.commit();
-            Log.d("step", "stepItemClicked: " + step.getDescription());
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("step-key", step);
-            Navigation.findNavController(requireView()).navigate(R.id.action_detailFragment_to_stepsFragment, bundle);
-        }
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(RECIPE_KEY,recipe);
+        outState.putString(RECIPE_NAME_KEY, recipeName);
+        outState.putParcelableArrayList(INGREDIENTS_KEY, ingredients);
+
 
     }
 }

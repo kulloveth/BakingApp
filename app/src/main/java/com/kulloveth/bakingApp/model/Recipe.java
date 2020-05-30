@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,10 +20,10 @@ public class Recipe implements Parcelable {
     private String name;
     @SerializedName("ingredients")
     @Expose
-    private List<Ingredient> ingredients = null;
+    private ArrayList<Ingredient> ingredients = null;
     @SerializedName("steps")
     @Expose
-    private List<Step> steps = null;
+    private ArrayList<Step> steps = null;
     @SerializedName("servings")
     @Expose
     private int servings;
@@ -33,7 +34,7 @@ public class Recipe implements Parcelable {
     public Recipe() {
     }
 
-    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image) {
+    public Recipe(int id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int servings, String image) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -69,11 +70,11 @@ public class Recipe implements Parcelable {
         return name;
     }
 
-    public List<Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Step> getSteps() {
         return steps;
     }
 

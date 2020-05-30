@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/saddlebrown"
-    tools:context=".ui.fragments.StepDetailFragment">
+    tools:context=".ui.StepDetailActivity">
 
     <FrameLayout
         android:id="@+id/video_frame"
@@ -32,16 +31,15 @@
             android:layout_width="match_parent"
             android:text="@string/no_video_available"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:gravity="center_horizontal" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/shortDescription"
         android:layout_width="match_parent"
-        android:textColor="@android:color/white"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/video_frame" />
+        app:layout_constraintTop_toBottomOf= "@id/video_frame"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
         android:id="@+id/steep_detail_sv"
@@ -52,7 +50,6 @@
         <TextView
             android:id="@+id/long_description"
             android:layout_width="match_parent"
-            android:textColor="@android:color/white"
             android:layout_height="wrap_content" />
 
     </ScrollView>

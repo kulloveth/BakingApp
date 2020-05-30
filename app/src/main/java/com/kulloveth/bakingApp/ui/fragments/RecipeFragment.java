@@ -1,5 +1,6 @@
 package com.kulloveth.bakingApp.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentRecipeBinding;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
+import com.kulloveth.bakingApp.ui.RecipeDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.MainAdapter;
 import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.kulloveth.bakingApp.utils.ProgressListener;
@@ -31,6 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.kulloveth.bakingApp.ui.fragments.DetailFragment.RECIPE_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 
 public class RecipeFragment extends Fragment implements ProgressListener, MainAdapter.RecipeItemClickListener {
@@ -123,12 +128,12 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
 
     @Override
     public void recipeItemClicked(Recipe recipe) {
-
-            Bundle bundle = new Bundle();
-        viewModel.setRecipeLivedata(recipe);
-        bundle.putParcelable(RECIPE_KEY,recipe);
-        Navigation.findNavController(requireView()).navigate(R.id.action_recipeFragment_to_detailFragment,bundle);
-
+        Intent intent = new Intent(requireActivity(), RecipeDetailActivity.class);
+        intent.putExtra(RECIPE_KEY, recipe);
+        intent.putExtra(RECIPE_NAME_KEY, recipe.getName());
+        intent.putParcelableArrayListExtra(STEPS_LIST_KEY, recipe.getSteps());
+        intent.putParcelableArrayListExtra(INGREDIENTS_KEY, recipe.getIngredients());
+        startActivity(intent);
 
     }
 }
