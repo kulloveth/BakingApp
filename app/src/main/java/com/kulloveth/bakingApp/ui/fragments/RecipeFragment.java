@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +29,7 @@ import com.kulloveth.bakingApp.utils.ProgressListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kulloveth.bakingApp.ui.fragments.DetailFragment.RECIPE_KEY;
+import static com.kulloveth.bakingApp.ui.fragments.IngredientFragment.RECIPE_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;

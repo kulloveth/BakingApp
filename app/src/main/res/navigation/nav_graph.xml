@@ -18,9 +18,9 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.kulloveth.bakingApp.ui.fragments.DetailFragment"
+        android:name="com.kulloveth.bakingApp.ui.fragments.IngredientFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
+        tools:layout="@layout/ingredient_detail" >
         <action
             android:id="@+id/action_detailFragment_to_stepsFragment"
             app:destination="@id/stepDetailFragment" >

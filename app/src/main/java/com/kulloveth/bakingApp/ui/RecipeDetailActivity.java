@@ -17,7 +17,7 @@ import com.kulloveth.bakingApp.databinding.ActivityRecipeBinding;
 import com.kulloveth.bakingApp.model.Ingredient;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.fragments.DetailFragment;
+import com.kulloveth.bakingApp.ui.fragments.IngredientFragment;
 import com.kulloveth.bakingApp.ui.fragments.StepDetailFragment;
 import com.kulloveth.bakingApp.ui.fragments.StepFragment;
 import com.kulloveth.bakingApp.ui.main.MainActivity;
@@ -25,7 +25,7 @@ import com.kulloveth.bakingApp.ui.widget.WidgetService;
 
 import java.util.ArrayList;
 
-import static com.kulloveth.bakingApp.ui.fragments.DetailFragment.RECIPE_KEY;
+import static com.kulloveth.bakingApp.ui.fragments.IngredientFragment.RECIPE_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
@@ -55,7 +55,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             recipeName = intent.getStringExtra(RECIPE_NAME_KEY);
 
             FragmentManager manager = getSupportFragmentManager();
-            DetailFragment fragment = new DetailFragment();
+            IngredientFragment fragment = new IngredientFragment();
             fragment.setIngredients(ingredients);
             manager.beginTransaction().add(R.id.ingredient_container, fragment).commit();
             Log.e("reci", "onCreate: " + recipe);

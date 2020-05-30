@@ -35,7 +35,7 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment {
+public class IngredientFragment extends Fragment {
 
     public static final String RECIPE_KEY = "steps-key";
     FragmentDetailBinding binding;
@@ -45,7 +45,7 @@ public class DetailFragment extends Fragment {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
     String recipeName;
 
-    public DetailFragment() {
+    public IngredientFragment() {
         // Required empty public constructor
     }
 
