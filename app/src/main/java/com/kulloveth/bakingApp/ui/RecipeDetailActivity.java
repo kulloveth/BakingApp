@@ -45,7 +45,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         binding = ActivityRecipeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         isTablet = getResources().getBoolean(R.bool.isTablet);
-        setSupportActionBar(binding.recipeToolbar.recipeToolbar);
+        //setSupportActionBar(binding.recipeToolbar.recipeToolbar);
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
@@ -67,7 +67,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             if (isTablet) {
                 StepDetailFragment stepsFragment = new StepDetailFragment();
                 stepsFragment.setStep(stepList.get(0));
-                manager.beginTransaction().add(R.id.step_detail_graph, stepFragment).commit();
+                manager.beginTransaction().add(R.id.step_detail_graph, stepsFragment).commit();
             }
         } else {
             recipeName = savedInstanceState.getString(RECIPE_NAME_KEY);

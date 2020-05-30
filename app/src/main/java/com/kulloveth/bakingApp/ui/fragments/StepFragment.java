@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,6 +59,7 @@ public class StepFragment extends Fragment implements StepAdapter.StepItemClickL
     public void setStepList(ArrayList<Step> stepList) {
         this.stepList = stepList;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -78,10 +80,13 @@ public class StepFragment extends Fragment implements StepAdapter.StepItemClickL
     @Override
     public void stepItemClicked(Step step) {
         if (isTablet) {
-            StepDetailFragment fragment = StepDetailFragment.newInstance(step);
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.step_detail_graph, fragment);
-            transaction.commit();
+            StepDetailFragment fragment = new StepDetailFragment();
+            fragment.setStep(step);
+            FragmentManager fragmentManager = getFragmentManager();
+            if (fragmentManager != null) {
+                fragmentManager.beginTransaction().replace(R.id.step_detail_graph, fragment).commit();
+            }
+
             Log.d("step", "stepItemClicked: " + step.getDescription());
         } else {
             Intent intent = new Intent(requireActivity(), StepDetailActivity.class);
