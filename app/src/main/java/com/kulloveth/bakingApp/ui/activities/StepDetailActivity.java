@@ -1,4 +1,4 @@
-package com.kulloveth.bakingApp.ui;
+package com.kulloveth.bakingApp.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,14 +1,12 @@
-package com.kulloveth.bakingApp.ui.fragments;
+package com.kulloveth.bakingApp.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,12 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
-import com.kulloveth.bakingApp.databinding.FragmentRecipeBinding;
+import com.kulloveth.bakingApp.databinding.ActivityRecipeBinding;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.RecipeDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.MainAdapter;
-import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
+import com.kulloveth.bakingApp.ui.RecipeActivityViewModel;
 import com.kulloveth.bakingApp.utils.ProgressListener;
 
 import java.util.ArrayList;
@@ -35,40 +32,27 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 
-public class RecipeFragment extends Fragment implements ProgressListener, MainAdapter.RecipeItemClickListener {
+public class RecipeActivity extends AppCompatActivity implements ProgressListener, MainAdapter.RecipeItemClickListener {
 
 
     private MainAdapter adapter;
-    private MainActivityViewModel viewModel;
-    FragmentRecipeBinding binding;
+    private RecipeActivityViewModel viewModel;
+    ActivityRecipeBinding binding;
     RecyclerView recyclerView;
     Navigation navigation;
     List<Step> steps = new ArrayList<>();
     boolean isTablet;
 
-
-    public RecipeFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentRecipeBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityRecipeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         isTablet = getResources().getBoolean(R.bool.isTablet);
         binding.recipeToolbar.recipeToolbar.setTitle("Recipes");
 
-        viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        viewModel = new ViewModelProvider(this).get(RecipeActivityViewModel.class);
         viewModel.setProgressListener(this);
         adapter = new MainAdapter();
         adapter.setClickListener(this);
@@ -79,8 +63,9 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
         getRecipe();
     }
 
+
     private void getRecipe() {
-        viewModel.getRecipe().observe(requireActivity(), recipes -> {
+        viewModel.getRecipe().observe(this, recipes -> {
             if (!recipes.isEmpty()) {
                 adapter.submitList(recipes);
                 Log.d("frag", "onChanged: " + recipes);
@@ -91,15 +76,15 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
     private void setLayoutManager() {
 
         if (!isTablet) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 3));
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         }
     }
 
     @Override
     public void showLoading() {
-        if (AppUtils.isConnected(requireActivity())) {
+        if (AppUtils.isConnected(this)) {
             binding.recipeProgressbar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
         } else {
@@ -120,12 +105,12 @@ public class RecipeFragment extends Fragment implements ProgressListener, MainAd
 
     void promptUserForNetwork() {
         binding.recipeProgressbar.setVisibility(View.INVISIBLE);
-        Snackbar.make(requireView(), getString(R.string.no_internet_message), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getWindow().getDecorView(), getString(R.string.no_internet_message), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void recipeItemClicked(Recipe recipe) {
-        Intent intent = new Intent(requireActivity(), RecipeDetailActivity.class);
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
         intent.putExtra(RECIPE_KEY, recipe);
         intent.putExtra(RECIPE_NAME_KEY, recipe.getName());
         intent.putParcelableArrayListExtra(STEPS_LIST_KEY, recipe.getSteps());

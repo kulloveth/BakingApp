@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentStepBinding;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.StepDetailActivity;
+import com.kulloveth.bakingApp.ui.activities.StepDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 
 import java.util.ArrayList;

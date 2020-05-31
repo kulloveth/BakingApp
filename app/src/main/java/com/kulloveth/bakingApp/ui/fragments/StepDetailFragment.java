@@ -30,12 +30,12 @@ import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentStepsBinding;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
+import com.kulloveth.bakingApp.ui.RecipeActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
 
-import static com.kulloveth.bakingApp.ui.RecipeDetailActivity.IS_TABLET_KEY;
+import static com.kulloveth.bakingApp.ui.activities.RecipeDetailActivity.IS_TABLET_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +46,7 @@ public class StepDetailFragment extends Fragment {
     public static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
 
     private FragmentStepsBinding binding;
-    private MainActivityViewModel mainActivityViewModel;
+    private RecipeActivityViewModel recipeActivityViewModel;
     private SimpleExoPlayer simpleExoPlayer;
     private SimpleExoPlayerView simpleExoPlayerView;
     private TextView noVideoMessage;
@@ -93,7 +93,7 @@ public class StepDetailFragment extends Fragment {
 
         setPortraitOrLandscape();
 
-        mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        recipeActivityViewModel = new ViewModelProvider(requireActivity()).get(RecipeActivityViewModel.class);
 
 
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {

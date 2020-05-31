@@ -1,4 +1,4 @@
-package com.kulloveth.bakingApp.ui;
+package com.kulloveth.bakingApp.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +13,13 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kulloveth.bakingApp.R;
-import com.kulloveth.bakingApp.databinding.ActivityRecipeBinding;
+import com.kulloveth.bakingApp.databinding.ActivityRecipeDetailBinding;
 import com.kulloveth.bakingApp.model.Ingredient;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.model.Step;
 import com.kulloveth.bakingApp.ui.fragments.IngredientFragment;
 import com.kulloveth.bakingApp.ui.fragments.StepDetailFragment;
 import com.kulloveth.bakingApp.ui.fragments.StepFragment;
-import com.kulloveth.bakingApp.ui.main.MainActivity;
 import com.kulloveth.bakingApp.ui.widget.WidgetService;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
-    ActivityRecipeBinding binding;
+    ActivityRecipeDetailBinding binding;
     Recipe recipe;
     ArrayList<Step> stepList = new ArrayList<>();
     ArrayList<Ingredient> ingredients = new ArrayList<>();
@@ -43,7 +42,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityRecipeBinding.inflate(getLayoutInflater());
+        binding = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         isTablet = getResources().getBoolean(R.bool.isTablet);
         setSupportActionBar(binding.recipeToolbar.recipeToolbar);
@@ -106,7 +105,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         switch (itemId) {
             case android.R.id.home:
                 if (isIntentFromAppWidget) {
-                    Intent intent = new Intent(this, MainActivity.class);
+                    Intent intent = new Intent(this, RecipeActivity.class);
                     startActivity(intent);
                 } else {
                     onBackPressed();

@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.StepDetailActivity"></activity>
+        <activity android:name=".ui.activities.StepDetailActivity" />
 
 
         <receiver android:name=".ui.widget.WidgetProvider">
@@ -32,16 +32,16 @@
         </receiver>
 
         <activity
-            android:name=".ui.RecipeDetailActivity"
-            android:parentActivityName=".ui.main.MainActivity">
+            android:name=".ui.activities.RecipeDetailActivity"
+            android:parentActivityName=".ui.activities.RecipeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity">
+                android:value=".ui.activities.RecipeActivity">
 
             </meta-data>
 
         </activity>
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".ui.activities.RecipeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

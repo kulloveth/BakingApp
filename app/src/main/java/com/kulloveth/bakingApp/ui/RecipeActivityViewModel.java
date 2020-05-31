@@ -1,4 +1,4 @@
-package com.kulloveth.bakingApp.ui.main;
+package com.kulloveth.bakingApp.ui;
 
 import android.util.Log;
 
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.kulloveth.bakingApp.ApiUtils;
 import com.kulloveth.bakingApp.model.Recipe;
-import com.kulloveth.bakingApp.model.Step;
 import com.kulloveth.bakingApp.retrofit.BakingApiServiceInterface;
 import com.kulloveth.bakingApp.utils.ProgressListener;
 
@@ -18,36 +17,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivityViewModel extends ViewModel {
+public class RecipeActivityViewModel extends ViewModel {
 
-    private static final String TAG = MainActivityViewModel.class.getSimpleName();
+    private static final String TAG = RecipeActivityViewModel.class.getSimpleName();
     private BakingApiServiceInterface apiServiceInterface;
     private MutableLiveData<List<Recipe>> recipeLivedata;
-    private MutableLiveData<Recipe> recipeMutableLiveData;
-    private MutableLiveData<Step> stepMutableLiveData;
     private ProgressListener progressListener;
 
-    public MainActivityViewModel() {
+    public RecipeActivityViewModel() {
         apiServiceInterface = ApiUtils.getBakingApiServiceInterface();
         recipeLivedata = new MutableLiveData<>();
-        recipeMutableLiveData = new MutableLiveData<>();
-        stepMutableLiveData = new MutableLiveData<>();
-    }
-
-    public void setRecipeLivedata(Recipe recipe) {
-        recipeMutableLiveData.setValue(recipe);
-    }
-
-    public void setStepLivedata(Step step) {
-        stepMutableLiveData.setValue(step);
-    }
-
-    public LiveData<Recipe> getRecipeLivedata() {
-        return recipeMutableLiveData;
-    }
-
-    public LiveData<Step> getStepLivedata() {
-        return stepMutableLiveData;
     }
 
     public LiveData<List<Recipe>> getRecipe() {

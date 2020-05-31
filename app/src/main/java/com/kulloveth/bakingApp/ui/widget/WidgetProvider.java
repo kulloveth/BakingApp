@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.model.Ingredient;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.RecipeDetailActivity;
+import com.kulloveth.bakingApp.ui.activities.RecipeDetailActivity;
 
 import java.util.ArrayList;
 
