@@ -38,6 +38,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
     String recipeName;
     boolean isTablet;
+    public static final String IS_TABLET_KEY="is_tablet_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +68,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
             if (isTablet) {
                 StepDetailFragment stepsFragment = new StepDetailFragment();
                 stepsFragment.setStep(stepList.get(0));
-                manager.beginTransaction().add(R.id.step_detail_graph, stepFragment).commit();
+                manager.beginTransaction().add(R.id.step_detail_graph, stepsFragment).commit();
             }
         } else {
             recipeName = savedInstanceState.getString(RECIPE_NAME_KEY);
             ingredients = savedInstanceState.getParcelableArrayList(INGREDIENTS_KEY);
             stepList = savedInstanceState.getParcelableArrayList(STEPS_LIST_KEY);
+            isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(recipeName);
@@ -86,6 +88,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         outState.putParcelableArrayList(INGREDIENTS_KEY, ingredients);
         outState.putParcelableArrayList(STEPS_LIST_KEY, stepList);
         outState.putString(RECIPE_NAME_KEY, recipeName);
+        outState.putBoolean(IS_TABLET_KEY,isTablet);
     }
 
 

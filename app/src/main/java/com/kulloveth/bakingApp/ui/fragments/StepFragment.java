@@ -2,22 +2,20 @@ package com.kulloveth.bakingApp.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentStepBinding;
-import com.kulloveth.bakingApp.databinding.FragmentStepsBinding;
 import com.kulloveth.bakingApp.model.Step;
 import com.kulloveth.bakingApp.ui.StepDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
@@ -25,7 +23,6 @@ import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 import java.util.ArrayList;
 
 import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.STEP_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 /**
@@ -34,11 +31,10 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 public class StepFragment extends Fragment implements StepAdapter.StepItemClickListener {
 
 
-    RecyclerView stepRecyclerView;
-    StepAdapter stepAdapter;
-    FragmentStepBinding binding;
-    boolean isTablet;
-    ArrayList<Step> stepList = new ArrayList<>();
+    private StepAdapter stepAdapter;
+    private FragmentStepBinding binding;
+    private boolean isTablet;
+    private ArrayList<Step> stepList = new ArrayList<>();
 
     public StepFragment() {
         // Required empty public constructor
@@ -58,6 +54,7 @@ public class StepFragment extends Fragment implements StepAdapter.StepItemClickL
     public void setStepList(ArrayList<Step> stepList) {
         this.stepList = stepList;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -68,7 +65,7 @@ public class StepFragment extends Fragment implements StepAdapter.StepItemClickL
         isTablet = getResources().getBoolean(R.bool.isTablet);
         stepAdapter = new StepAdapter();
         stepAdapter.setClickListener(this);
-        stepRecyclerView = binding.stepRv;
+        RecyclerView stepRecyclerView = binding.stepRv;
         stepRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         stepRecyclerView.setHasFixedSize(true);
         stepRecyclerView.setAdapter(stepAdapter);
@@ -78,10 +75,13 @@ public class StepFragment extends Fragment implements StepAdapter.StepItemClickL
     @Override
     public void stepItemClicked(Step step) {
         if (isTablet) {
-            StepDetailFragment fragment = StepDetailFragment.newInstance(step);
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.step_detail_graph, fragment);
-            transaction.commit();
+            StepDetailFragment fragment = new StepDetailFragment();
+            fragment.setStep(step);
+            FragmentManager fragmentManager = getFragmentManager();
+            if (fragmentManager != null) {
+                fragmentManager.beginTransaction().replace(R.id.step_detail_graph, fragment).commit();
+            }
+
             Log.d("step", "stepItemClicked: " + step.getDescription());
         } else {
             Intent intent = new Intent(requireActivity(), StepDetailActivity.class);
