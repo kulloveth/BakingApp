@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,8 +34,8 @@ import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
+
+import static com.kulloveth.bakingApp.ui.RecipeDetailActivity.IS_TABLET_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,16 +44,13 @@ public class StepDetailFragment extends Fragment {
     public static final String STEP_KEY = "step-key";
     public static final String SIMPLE_EXPOPLAYER_STTE = "simple_exoplayerstate";
     public static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
-    public static final String IS_TABLET_KEY = "tablet";
 
-    FragmentStepsBinding binding;
-    MainActivityViewModel mainActivityViewModel;
-    SimpleExoPlayer simpleExoPlayer;
-    SimpleExoPlayerView simpleExoPlayerView;
-    TextView noVideoMessage;
-    ImageView thumbnail;
-    private List<Step> steps = new ArrayList<>();
-    Step step;
+    private FragmentStepsBinding binding;
+    private MainActivityViewModel mainActivityViewModel;
+    private SimpleExoPlayer simpleExoPlayer;
+    private SimpleExoPlayerView simpleExoPlayerView;
+    private TextView noVideoMessage;
+    private Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
     private boolean isTablet;
@@ -80,8 +76,6 @@ public class StepDetailFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -90,16 +84,11 @@ public class StepDetailFragment extends Fragment {
         expoPlayerPosition = 0;
         exoPlayerState = true;
         isTablet = getResources().getBoolean(R.bool.isTablet);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            step = bundle.getParcelable(STEP_KEY);
-        }
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP_KEY);
             exoPlayerState = savedInstanceState.getBoolean(SIMPLE_EXPOPLAYER_STTE);
             expoPlayerPosition = savedInstanceState.getLong(SIMPLE_EXOPLAYER_POSITION);
-            //isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
+            isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
 
         setPortraitOrLandscape();
@@ -114,7 +103,7 @@ public class StepDetailFragment extends Fragment {
                 initializePlayer(Uri.parse(step.getVideoURL()));
             } else {
                 simpleExoPlayerView.setVisibility(View.GONE);
-                noVideoMessage.setText("No Internet");
+                noVideoMessage.setText(getResources().getString(R.string.no_internet_message));
             }
         } else {
             if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
@@ -149,7 +138,7 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    void setPortraitOrLandscape() {
+    private void setPortraitOrLandscape() {
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
@@ -203,7 +192,7 @@ public class StepDetailFragment extends Fragment {
         outState.putParcelable(STEP_KEY, step);
         outState.putBoolean(SIMPLE_EXPOPLAYER_STTE, exoPlayerState);
         outState.putLong(SIMPLE_EXOPLAYER_POSITION, expoPlayerPosition);
-        //outState.putBoolean(IS_TABLET_KEY, isTablet);
+        outState.putBoolean(IS_TABLET_KEY, isTablet);
     }
 
     public void setStep(Step step) {
@@ -218,11 +207,4 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    public static StepDetailFragment newInstance(Step step) {
-        StepDetailFragment stepDetailFragment = new StepDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(STEP_KEY, step);
-        stepDetailFragment.setArguments(args);
-        return stepDetailFragment;
-    }
 }

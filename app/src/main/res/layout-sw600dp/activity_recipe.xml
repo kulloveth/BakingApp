@@ -3,44 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="2"
+    android:orientation="vertical"
     tools:context=".ui.RecipeDetailActivity">
 
+    <include layout="@layout/toolbar" />
+
     <LinearLayout
-        android:weightSum="2"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <FrameLayout
-            android:id="@+id/ingredient_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:background="@color/saddlebrown"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingBottom="@dimen/dimens_8dp" />
+            android:orientation="vertical"
+            android:weightSum="2">
 
-        <FrameLayout
-            android:id="@+id/step_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:background="@color/darksalmon"
-            android:layout_marginTop="@dimen/dimens_16dp" />
+            <FrameLayout
+                android:id="@+id/ingredient_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/dimens_8dp"
+                tools:background="@color/saddlebrown" />
 
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/step_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dimens_16dp"
+                android:layout_weight="1"
+                tools:background="@color/darksalmon" />
 
+        </LinearLayout>
 
 
         <FrameLayout
             android:id="@+id/step_detail_graph"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            tools:background="#333"
-            android:layout_height="match_parent" />
+            tools:background="#333" />
 
-
-
+    </LinearLayout>
 </LinearLayout>
+
+
