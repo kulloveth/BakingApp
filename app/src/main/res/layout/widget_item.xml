@@ -9,6 +9,7 @@
         android:id="@+id/ingredient_naame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/saddlebrown"
         android:layout_weight="2"
         tools:text="Recipe Name" />
 
@@ -17,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textColor="@color/saddlebrown"
         android:gravity="start"
         tools:text="2 cup" />
 </LinearLayout>

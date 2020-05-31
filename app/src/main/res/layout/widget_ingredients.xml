@@ -16,6 +16,8 @@
         <TextView
             android:id="@+id/widget_recipe_name"
             android:layout_width="match_parent"
+            android:background="@color/saddlebrown"
+            android:textColor="@android:color/white"
             android:layout_height="wrap_content" />
 
         <LinearLayout

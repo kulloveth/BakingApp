@@ -1,8 +1,6 @@
 package com.kulloveth.bakingApp.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +8,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.IngredientDetailBinding;
 import com.kulloveth.bakingApp.model.Ingredient;
-import com.kulloveth.bakingApp.model.Recipe;
-import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.StepDetailActivity;
 import com.kulloveth.bakingApp.ui.adapters.IngredientsAdapter;
-import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
-import com.kulloveth.bakingApp.ui.main.MainActivityViewModel;
 
 import java.util.ArrayList;
 
-import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.STEP_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
 import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,7 +81,6 @@ public class IngredientFragment extends Fragment {
 
     private void getIngredients() {
         ingredientsAdapter.submitList(ingredients);
-        Log.e("ingre", "getIngredients: "+ingredients);
     }
 
 

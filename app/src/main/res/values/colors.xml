@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="saddlebrown">#7b2a14</color>
     <color name="darksalmon">#dfc2b5</color>
+    <color name="line_color">#dadada</color>
 </resources>

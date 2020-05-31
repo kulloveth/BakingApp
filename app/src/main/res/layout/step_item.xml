@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/dimens_5dp"
-    app:cardBackgroundColor="@color/saddlebrown"
-    app:cardUseCompatPadding="true">
+    app:cardBackgroundColor="@color/saddlebrown">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,4 +23,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_color"/>
 </androidx.cardview.widget.CardView>
