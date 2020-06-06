@@ -14,10 +14,10 @@ import com.kulloveth.bakingApp.ui.activities.RecipeDetailActivity;
 
 import java.util.ArrayList;
 
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.IS_INTENTFROMWDGET_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.IS_INTENTFROMWDGET_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.STEPS_LIST_KEY;
 
 public class WidgetProvider extends AppWidgetProvider {
 

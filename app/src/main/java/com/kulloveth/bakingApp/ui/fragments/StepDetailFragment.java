@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -30,7 +29,6 @@ import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.FragmentStepsBinding;
 import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.RecipeActivityViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLConnection;
@@ -46,7 +44,6 @@ public class StepDetailFragment extends Fragment {
     public static final String SIMPLE_EXOPLAYER_POSITION = "simple_exo_playerpositon";
 
     private FragmentStepsBinding binding;
-    private RecipeActivityViewModel recipeActivityViewModel;
     private SimpleExoPlayer simpleExoPlayer;
     private SimpleExoPlayerView simpleExoPlayerView;
     private TextView noVideoMessage;
@@ -90,12 +87,7 @@ public class StepDetailFragment extends Fragment {
             expoPlayerPosition = savedInstanceState.getLong(SIMPLE_EXOPLAYER_POSITION);
             isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
-
         setPortraitOrLandscape();
-
-        recipeActivityViewModel = new ViewModelProvider(requireActivity()).get(RecipeActivityViewModel.class);
-
-
         if (!step.getVideoURL().equals("") && step.getVideoURL() != null) {
             if (AppUtils.isConnected(requireActivity())) {
                 binding.thummbnail.setVisibility(View.GONE);

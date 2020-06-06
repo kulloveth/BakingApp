@@ -23,7 +23,7 @@ import com.kulloveth.bakingApp.ui.adapters.StepAdapter;
 import java.util.ArrayList;
 
 import static com.kulloveth.bakingApp.ui.fragments.StepDetailFragment.STEP_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.STEPS_LIST_KEY;
 
 /**
  * A simple {@link Fragment} subclass.

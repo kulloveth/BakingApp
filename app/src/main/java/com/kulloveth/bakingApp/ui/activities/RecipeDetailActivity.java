@@ -25,9 +25,10 @@ import com.kulloveth.bakingApp.ui.widget.WidgetService;
 import java.util.ArrayList;
 
 import static com.kulloveth.bakingApp.ui.fragments.IngredientFragment.RECIPE_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.IS_INTENTFROMWDGET_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.STEPS_LIST_KEY;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
     String recipeName;
     boolean isTablet;
-    public static final String IS_TABLET_KEY="is_tablet_key";
+    public static final String IS_TABLET_KEY = "is_tablet_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         binding = ActivityRecipeDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         isTablet = getResources().getBoolean(R.bool.isTablet);
-        setSupportActionBar(binding.recipeToolbar.recipeToolbar);
+        if (binding.recipeToolbar != null) {
+            setSupportActionBar(binding.recipeToolbar.recipeToolbar);
+        }
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
@@ -87,7 +90,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         outState.putParcelableArrayList(INGREDIENTS_KEY, ingredients);
         outState.putParcelableArrayList(STEPS_LIST_KEY, stepList);
         outState.putString(RECIPE_NAME_KEY, recipeName);
-        outState.putBoolean(IS_TABLET_KEY,isTablet);
+        outState.putBoolean(IS_TABLET_KEY, isTablet);
     }
 
 
@@ -100,7 +103,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        boolean isIntentFromAppWidget = getIntent().getBooleanExtra(WidgetService.IS_INTENTFROMWDGET_KEY, false);
+        boolean isIntentFromAppWidget = getIntent().getBooleanExtra(IS_INTENTFROMWDGET_KEY, false);
         int itemId = item.getItemId();
         switch (itemId) {
             case android.R.id.home:

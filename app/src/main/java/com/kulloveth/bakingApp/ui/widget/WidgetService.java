@@ -13,13 +13,13 @@ import com.kulloveth.bakingApp.model.Step;
 
 import java.util.ArrayList;
 
+import static com.kulloveth.bakingApp.utils.Constants.ACTOIN_UPDATE_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.STEPS_LIST_KEY;
+
 public class WidgetService extends IntentService {
 
-    public static final String INGREDIENTS_KEY = "ingredients_key";
-    public static final String RECIPE_NAME_KEY = "recipe_name_key";
-    public static final String STEPS_LIST_KEY = "steps_list_key";
-    public static final String IS_INTENTFROMWDGET_KEY = "isintentfrom_key";
-    public static final String ACTOIN_UPDATE_KEY = "actionupdate_key";
 
     public WidgetService() {
         super("WidgetService");

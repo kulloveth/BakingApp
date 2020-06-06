@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.kulloveth.bakingApp.ApiUtils;
+import com.kulloveth.bakingApp.utils.ApiUtils;
 import com.kulloveth.bakingApp.model.Recipe;
 import com.kulloveth.bakingApp.retrofit.BakingApiServiceInterface;
 import com.kulloveth.bakingApp.utils.ProgressListener;

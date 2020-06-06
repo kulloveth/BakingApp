@@ -1,4 +1,4 @@
-package com.kulloveth.bakingApp;
+package com.kulloveth.bakingApp.utils;
 
 import com.kulloveth.bakingApp.retrofit.BakingApiServiceInterface;
 import com.kulloveth.bakingApp.retrofit.RetrofitClient;

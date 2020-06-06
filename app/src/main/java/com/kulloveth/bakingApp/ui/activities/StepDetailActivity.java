@@ -42,7 +42,6 @@ public class StepDetailActivity extends AppCompatActivity {
     Step step;
     private long expoPlayerPosition;
     private boolean exoPlayerState;
-    private boolean isTablet;
     SimpleExoPlayer simpleExoPlayer;
     SimpleExoPlayerView simpleExoPlayerView;
     TextView noVideoMessage;
@@ -60,8 +59,6 @@ public class StepDetailActivity extends AppCompatActivity {
         simpleExoPlayerView = binding.mediaPlayer;
         noVideoMessage = binding.noVideoMessage;
         expoPlayerPosition = 0;
-        exoPlayerState = true;
-        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         Intent intent = getIntent();
         step = intent.getParcelableExtra(STEP_KEY);
@@ -69,7 +66,6 @@ public class StepDetailActivity extends AppCompatActivity {
             step = savedInstanceState.getParcelable(STEP_KEY);
             exoPlayerState = savedInstanceState.getBoolean(SIMPLE_EXPOPLAYER_STTE);
             expoPlayerPosition = savedInstanceState.getLong(SIMPLE_EXOPLAYER_POSITION);
-            //isTablet = savedInstanceState.getBoolean(IS_TABLET_KEY);
         }
 
         setPortraitOrLandscape();
@@ -82,7 +78,7 @@ public class StepDetailActivity extends AppCompatActivity {
                 initializePlayer(Uri.parse(step.getVideoURL()));
             } else {
                 simpleExoPlayerView.setVisibility(View.GONE);
-                noVideoMessage.setText("No Internet");
+                noVideoMessage.setText(getResources().getString(R.string.no_internet_message));
             }
         } else {
             if (!step.getThumbnailURL().equals("") && isImageFile(step.getThumbnailURL())) {
@@ -170,7 +166,6 @@ public class StepDetailActivity extends AppCompatActivity {
         outState.putParcelable(STEP_KEY, step);
         outState.putBoolean(SIMPLE_EXPOPLAYER_STTE, exoPlayerState);
         outState.putLong(SIMPLE_EXOPLAYER_POSITION, expoPlayerPosition);
-        //outState.putBoolean(IS_TABLET_KEY, isTablet);
     }
 
     @Override

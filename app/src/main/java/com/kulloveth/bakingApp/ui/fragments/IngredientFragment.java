@@ -18,8 +18,9 @@ import com.kulloveth.bakingApp.ui.adapters.IngredientsAdapter;
 
 import java.util.ArrayList;
 
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.RECIPE_NAME_KEY;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,12 +28,10 @@ import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
 public class IngredientFragment extends Fragment {
 
     public static final String RECIPE_KEY = "steps-key";
-   IngredientDetailBinding binding;
-    IngredientsAdapter ingredientsAdapter;
-    RecyclerView ingredientsRecyclerView;
-    boolean isTablet;
-    ArrayList<Ingredient> ingredients = new ArrayList<>();
-    String recipeName;
+    private IngredientDetailBinding binding;
+    private IngredientsAdapter ingredientsAdapter;
+    private ArrayList<Ingredient> ingredients = new ArrayList<>();
+    private String recipeName;
 
     public IngredientFragment() {
         // Required empty public constructor
@@ -54,8 +53,8 @@ public class IngredientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       binding = IngredientDetailBinding.inflate(inflater, container, false);
-       View view = binding.getRoot();
+        binding = IngredientDetailBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         return view;
     }
 
@@ -64,14 +63,14 @@ public class IngredientFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        isTablet = getResources().getBoolean(R.bool.isTablet);
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
 
         if (savedInstanceState != null) {
             ingredients = savedInstanceState.getParcelableArrayList(INGREDIENTS_KEY);
         }
 
         ingredientsAdapter = new IngredientsAdapter();
-        ingredientsRecyclerView = binding.ingredientsRv;
+        RecyclerView ingredientsRecyclerView = binding.ingredientsRv;
         ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);

@@ -8,7 +8,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,29 +17,24 @@ import com.kulloveth.bakingApp.AppUtils;
 import com.kulloveth.bakingApp.R;
 import com.kulloveth.bakingApp.databinding.ActivityRecipeBinding;
 import com.kulloveth.bakingApp.model.Recipe;
-import com.kulloveth.bakingApp.model.Step;
-import com.kulloveth.bakingApp.ui.adapters.MainAdapter;
 import com.kulloveth.bakingApp.ui.RecipeActivityViewModel;
+import com.kulloveth.bakingApp.ui.adapters.MainAdapter;
 import com.kulloveth.bakingApp.utils.ProgressListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.kulloveth.bakingApp.ui.fragments.IngredientFragment.RECIPE_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.INGREDIENTS_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.RECIPE_NAME_KEY;
-import static com.kulloveth.bakingApp.ui.widget.WidgetService.STEPS_LIST_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.INGREDIENTS_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.RECIPE_NAME_KEY;
+import static com.kulloveth.bakingApp.utils.Constants.STEPS_LIST_KEY;
 
 
 public class RecipeActivity extends AppCompatActivity implements ProgressListener, MainAdapter.RecipeItemClickListener {
 
 
+    private static final String TAG = RecipeActivity.class.getSimpleName();
     private MainAdapter adapter;
     private RecipeActivityViewModel viewModel;
     ActivityRecipeBinding binding;
     RecyclerView recyclerView;
-    Navigation navigation;
-    List<Step> steps = new ArrayList<>();
     boolean isTablet;
 
     @Override
@@ -58,7 +52,6 @@ public class RecipeActivity extends AppCompatActivity implements ProgressListene
         adapter.setClickListener(this);
         recyclerView = binding.recipeRv;
         setLayoutManager();
-        // recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         getRecipe();
     }
@@ -68,7 +61,7 @@ public class RecipeActivity extends AppCompatActivity implements ProgressListene
         viewModel.getRecipe().observe(this, recipes -> {
             if (!recipes.isEmpty()) {
                 adapter.submitList(recipes);
-                Log.d("frag", "onChanged: " + recipes);
+                Log.d(TAG, "onChanged: " + recipes);
             }
         });
     }
