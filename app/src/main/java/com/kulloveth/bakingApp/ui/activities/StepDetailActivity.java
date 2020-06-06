@@ -85,7 +85,8 @@ public class StepDetailActivity extends AppCompatActivity {
                 binding.thummbnail.setVisibility(View.VISIBLE);
                 Picasso.get().load(step.getThumbnailURL()).placeholder(R.drawable.ingredients).into(binding.thummbnail);
             }
-            binding.noVideoMessage.setVisibility(View.VISIBLE);
+            binding.thummbnail.setVisibility(View.VISIBLE);
+            binding.thummbnail.setImageResource(R.drawable.ingredients);
             simpleExoPlayerView.setVisibility(View.GONE);
 
         }
